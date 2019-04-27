@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Slacker{% endblock %}
+{% load materializecss %}
+{% block content %}
+	<div class="col s10">
+		<div class="row">
+			<h1 class="">{{chat.name}} Chat with {{profile2.user.username}}</h1>
+			<button class="btn purple mt3">Add User to Chat</button>
+		</div>
+		{% for message in chat.privatemessage_set.all %}
+			{% if request.user.profile == message.profile %}
+				<div class="card-panel blue-grey lighten-5">
+					<h6>You<cite class="grey-text darken-1">~{{message.timestamp | timesince}} ago</cite>
+					</h6>
+					<p>{{message.content}}</p>
+				</div>
+				{% else %}
+					<div class="card-panel blue lighten-3 ">
+					<h6>
+						<a class='dropdown-trigger ' href='#' data-target='dropdown1'>{{message.profile.user.username}}</a> <cite class="grey-text darken-1">~{{message.timestamp | timesince}} ago</cite>
+					</h6>
+					<ul id='dropdown1' class='dropdown-content'>
+						<li><a href="#!">Message</a></li>
+						<li><a href="#!">View Profile</a></li>
+						
+					</ul>
+					<p>{{message.content}}</p>
+				</div>
+					{% endif %}
+			{% endfor %}
+			<div class="row">
+				<form method="POST" class="col s12">
+					{% csrf_token %}
+					<div class="row">
+						<div class="input-field col s11">
+							<i class="material-icons prefix">mode_edit</i>
+							<textarea name="content" id="content" class="materialize-textarea"></textarea>
+							<label for="content">Message</label>
+						</div>
+						<button class="btn-flat purple"><i class="material-icons white-text">send</i></button>
+					</div>
+				</form>
+			</div>
+		</div>
+		
+		<div class="col s2">
+			<ul>
+				<h5>Test</h5>
+				
+			</ul>
+		</div>
+		<script type="text/javascript">
+         $('.dropdown-trigger').dropdown();
+      </script>
+	{% endblock %}
